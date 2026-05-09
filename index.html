@@ -7,6 +7,7 @@
   <style>
     :root {
       --bg: #f7f7f5;
+      --card: #ffffff;
       --text: #1f2933;
       --muted: #667085;
       --line: #e4e7ec;
@@ -14,8 +15,9 @@
       --primary-dark: #1d4ed8;
       --danger: #dc2626;
       --ok: #15803d;
+      --warning: #f59e0b;
       --radius: 18px;
-      --shadow: 0 12px 30px rgba(15,23,42,.08);
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
     }
 
     * { box-sizing: border-box; }
@@ -27,7 +29,12 @@
       color: var(--text);
     }
 
-    header { padding: 28px 18px 16px; text-align: center; }
+    /* ── Header ── */
+    header {
+      padding: 28px 18px 16px;
+      text-align: center;
+      position: relative;
+    }
 
     .header-top {
       display: flex;
@@ -54,6 +61,7 @@
       line-height: 1.5;
     }
 
+    /* ── Lang toggle ── */
     .lang-toggle {
       display: flex;
       background: #eef2ff;
@@ -62,6 +70,7 @@
       gap: 2px;
       flex-shrink: 0;
     }
+
     .lang-toggle button {
       background: transparent;
       color: var(--primary);
@@ -69,11 +78,13 @@
       font-size: .85rem;
       padding: 6px 14px;
       border-radius: 999px;
-      transition: background .2s, color .2s;
+      transition: background .2s, color .2s, transform 0s;
     }
+
     .lang-toggle button:hover { background: #dbeafe; transform: none; }
     .lang-toggle button.active { background: var(--primary); color: white; }
 
+    /* ── Mis turnos CTA ── */
     .my-shifts-cta {
       display: flex;
       align-items: center;
@@ -91,41 +102,58 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
-    .my-shifts-cta:hover { background: #eef2ff; box-shadow: 0 4px 16px rgba(37,99,235,.18); transform: translateY(-1px); }
+    .my-shifts-cta:hover {
+      background: #eef2ff;
+      box-shadow: 0 4px 16px rgba(37,99,235,.18);
+      transform: translateY(-1px);
+    }
+    .my-shifts-cta svg { flex-shrink: 0; }
 
-    main { width: min(1120px, calc(100% - 28px)); margin: 0 auto 44px; }
+    /* ── Main ── */
+    main {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto 44px;
+    }
 
-    .topbar { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin: 18px 0; flex-wrap: wrap; }
-    .status { color: var(--muted); font-size: .95rem; }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin: 18px 0;
+      flex-wrap: wrap;
+    }
 
-    button, input, select { font: inherit; }
+    .status {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    button, input { font: inherit; }
 
     button {
       border: 0;
       border-radius: 999px;
-      padding: 10px 20px;
+      padding: 10px 16px;
       background: var(--primary);
       color: white;
       cursor: pointer;
       font-weight: 700;
-      transition: transform .15s, background .15s, opacity .15s;
+      transition: transform .15s ease, background .15s ease, opacity .15s ease;
     }
+
     button:hover { background: var(--primary-dark); transform: translateY(-1px); }
     button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
     button.secondary { background: #eef2ff; color: #1e40af; }
     button.secondary:hover { background: #dbeafe; }
     button.danger { background: var(--danger); }
 
-    /* Big prominent signup button */
-    .btn-signup-main {
-      width: 100%;
-      padding: 14px 20px;
-      font-size: 1.05rem;
-      border-radius: 14px;
-      margin-top: 10px;
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
     }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
 
     .card {
       background: rgba(255,255,255,.9);
@@ -137,65 +165,203 @@
       animation: fadeIn .35s ease both;
     }
 
-    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-    .day-title { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+    .day-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+
     .day-title h2 { margin: 0; font-size: 1.25rem; }
-    .date { color: var(--muted); font-size: .95rem; white-space: nowrap; }
 
-    .shift { border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 12px; background: #fff; }
-    .shift-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+    .date {
+      color: var(--muted);
+      font-size: .95rem;
+      white-space: nowrap;
+    }
+
+    .shift {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 12px;
+      background: #fff;
+    }
+
+    .shift-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
     .shift-name { font-weight: 800; font-size: 1.05rem; }
     .time { color: var(--muted); margin-top: 2px; }
 
-    .badge { border-radius: 999px; padding: 6px 10px; font-weight: 800; font-size: .85rem; background: #ecfdf3; color: var(--ok); white-space: nowrap; }
+    .badge {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 800;
+      font-size: .85rem;
+      background: #ecfdf3;
+      color: var(--ok);
+      white-space: nowrap;
+    }
+
     .badge.full { background: #fef2f2; color: var(--danger); }
 
-    .names { margin: 12px 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
-    .names li { background: #f2f4f7; border: 1px solid #e4e7ec; border-radius: 999px; padding: 6px 10px; font-size: .92rem; }
+    .names {
+      margin: 12px 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-    .empty { color: var(--muted); font-style: italic; margin: 12px 0; }
+    .names li {
+      background: #f2f4f7;
+      border: 1px solid #e4e7ec;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .92rem;
+    }
 
-    .empty-state { grid-column: 1/-1; text-align: center; padding: 48px 24px; color: var(--muted); }
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+      margin: 12px 0;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--muted);
+    }
     .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
     .empty-state p { margin: 0; font-size: 1.1rem; }
 
-    /* Dialogs */
-    dialog { border: 0; border-radius: 22px; padding: 0; width: min(520px, calc(100% - 28px)); box-shadow: 0 24px 80px rgba(15,23,42,.35); }
-    dialog::backdrop { background: rgba(15,23,42,.45); }
+    /* ── Mis turnos panel ── */
+    .panel {
+      margin: 22px 0;
+    }
+    .panel h2 { margin-top: 0; }
 
-    .modal { padding: 24px; background: white; border-radius: 22px; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .modal-header h2, .modal-header h3 { margin: 0; font-size: 1.4rem; }
-    .close-btn { background: #f2f4f7; color: var(--text); border-radius: 999px; padding: 6px 12px; font-size: .9rem; }
-    .close-btn:hover { background: #e4e7ec; transform: none; }
+    /* Modal mis turnos */
+    #myShiftsDialog {
+      border: 0;
+      border-radius: 22px;
+      padding: 0;
+      width: min(560px, calc(100% - 28px));
+      box-shadow: 0 24px 80px rgba(15, 23, 42, .35);
+    }
+    #myShiftsDialog::backdrop { background: rgba(15, 23, 42, .45); }
+    #myShiftsDialog .modal-inner {
+      padding: 24px;
+      background: white;
+      border-radius: 22px;
+    }
+    #myShiftsDialog .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    #myShiftsDialog .modal-header h2 { margin: 0; font-size: 1.4rem; }
+    #myShiftsDialog .close-btn {
+      background: #f2f4f7;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+    #myShiftsDialog .close-btn:hover { background: #e4e7ec; transform: none; }
 
-    .confirm-box { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: .97rem; line-height: 1.6; }
+    .my-shift {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding: 12px 0;
+    }
+
+    /* ── Dialogs ── */
+    dialog {
+      border: 0;
+      border-radius: 22px;
+      padding: 0;
+      width: min(520px, calc(100% - 28px));
+      box-shadow: 0 24px 80px rgba(15, 23, 42, .35);
+    }
+
+    dialog::backdrop { background: rgba(15, 23, 42, .45); }
+
+    .modal { padding: 22px; background: white; }
+    .modal h3 { margin: 0 0 6px; font-size: 1.4rem; }
+    .modal p { margin: 0 0 18px; color: var(--muted); }
+
+    /* Confirm summary box */
+    .confirm-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      font-size: .97rem;
+      line-height: 1.6;
+    }
     .confirm-box strong { display: block; margin-bottom: 4px; color: var(--primary-dark); }
 
-    /* Success */
-    .success-screen { text-align: center; padding: 12px 0 6px; }
-    .success-icon { font-size: 3.2rem; margin-bottom: 10px; display: block; animation: pop .4s cubic-bezier(.36,.07,.19,.97) both; }
-    @keyframes pop { 0% { transform:scale(.5); opacity:0; } 70% { transform:scale(1.15); } 100% { transform:scale(1); opacity:1; } }
-    .success-screen h3 { margin: 0 0 8px; font-size: 1.4rem; color: var(--ok); }
-    .success-screen p { margin: 0 0 6px; color: var(--muted); line-height: 1.5; }
-    .success-detail { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: .97rem; line-height: 1.8; text-align: left; }
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 12px 0 6px;
+    }
 
-    /* Field groups */
-    .field-group { margin-top: 16px; }
-    label { display: block; font-weight: 700; margin-bottom: 4px; }
-    .field-hint { font-size: .84rem; color: var(--muted); margin: 3px 0 6px; line-height: 1.4; }
-    input, select { width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 12px; background: white; transition: border-color .15s; }
-    input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
-    input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220,38,38,.10); }
-    .field-error { font-size: .84rem; color: var(--danger); margin: 5px 0 0; display: none; }
-    .field-error.show { display: block; }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 12px;
+      background: white;
+    }
 
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-top: 18px; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 18px;
+    }
 
-    .my-shift { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; border-top: 1px solid var(--line); padding: 12px 0; }
-
-    .toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background: #111827; color: white; border-radius: 999px; padding: 12px 20px; box-shadow: var(--shadow); display: none; z-index: 100; max-width: calc(100% - 28px); text-align: center; }
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: #111827;
+      color: white;
+      border-radius: 999px;
+      padding: 12px 18px;
+      box-shadow: var(--shadow);
+      display: none;
+      z-index: 10;
+      max-width: calc(100% - 28px);
+      text-align: center;
+    }
     .toast.show { display: block; }
 
     @media (max-width: 640px) {
@@ -211,19 +377,24 @@
 
   <header>
     <div class="header-top">
+      <!-- Lang toggle -->
       <div class="lang-toggle">
         <button id="btnEs" class="active" onclick="setLang('es')">ES</button>
         <button id="btnEu" onclick="setLang('eu')">EU</button>
       </div>
+
       <h1 id="mainTitle">Turnos de barra</h1>
-      <button class="my-shifts-cta" onclick="openMyShiftsDialog()">
+
+      <!-- Mis turnos CTA -->
+      <button class="my-shifts-cta" onclick="scrollToMyShifts()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
         </svg>
         <span id="myShiftsCta">Mis turnos</span>
       </button>
     </div>
-    <p class="subtitle" id="headerSubtitle">Apúntate a los turnos disponibles. Solo se muestran públicamente los nombres de las personas apuntadas.</p>
+
+    <p class="subtitle" id="headerSubtitle">Apúntate a los turnos disponibles. Se muestran públicamente el nombre y los apellidos de las personas apuntadas.</p>
   </header>
 
   <main>
@@ -231,105 +402,76 @@
       <div class="status" id="status">Cargando turnos...</div>
       <button class="secondary" id="reloadBtn">Actualizar</button>
     </section>
+
     <section class="grid" id="shiftGrid"></section>
+
   </main>
 
-  <!-- Dialog: apuntarse -->
-  <dialog id="signupDialog">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="dlgSignupTitle">Apuntarme</h3>
-        <button class="close-btn" onclick="signupDialog.close()">✕</button>
-      </div>
-
-      <div id="signupFormView">
-        <div class="confirm-box">
-          <strong id="signupConfirmLabel">Turno seleccionado:</strong>
-          <span id="signupShiftText"></span>
-        </div>
-        <input type="hidden" id="signupShiftId" />
-
-        <div class="field-group">
-          <label for="nombreCompleto" id="labelNombreCompleto">Nombre y apellido</label>
-          <p class="field-hint" id="hintNombreCompleto">Escribe tu nombre completo, como en tu DNI.</p>
-          <input id="nombreCompleto" autocomplete="name" placeholder="Ej: Ane Etxebarria" />
-          <p class="field-error" id="errNombreCompleto"></p>
-        </div>
-
-        <div class="field-group">
-          <label for="email" id="labelEmail">Correo electrónico</label>
-          <p class="field-hint" id="hintEmail">Te enviaremos la confirmación a este correo.</p>
-          <input id="email" type="email" autocomplete="email" placeholder="Ej: ane@correo.com" />
-          <p class="field-error" id="errEmail"></p>
-        </div>
-
-        <div class="actions">
-          <button type="button" class="secondary" id="dlgSignupCancel" onclick="signupDialog.close()">Cancelar</button>
-          <button type="button" id="dlgSignupConfirm" class="btn-signup-main" onclick="signup()">✔ Confirmar inscripción</button>
-        </div>
-      </div>
-
-      <div id="signupSuccessView" style="display:none">
-        <div class="success-screen">
-          <span class="success-icon">🎉</span>
-          <h3 id="successTitle">¡Apuntado!</h3>
-          <p id="successSubtitle">Tu inscripción ha quedado registrada.</p>
-          <div class="success-detail" id="successDetail"></div>
-          <div class="actions" style="justify-content:center; margin-top:10px;">
-            <button type="button" id="successClose" onclick="signupDialog.close()">Cerrar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </dialog>
-
   <!-- Dialog: mis turnos -->
-  <dialog id="myShiftsDialog">
-    <div class="modal">
+  <dialog id="myShiftsDialog" aria-labelledby="myPanelTitle">
+    <div class="modal-inner">
       <div class="modal-header">
         <h2 id="myPanelTitle">Mis turnos</h2>
-        <button class="close-btn" onclick="myShiftsDialog.close()">✕</button>
+        <button class="close-btn" onclick="$('myShiftsDialog').close()" aria-label="Cerrar">✕</button>
       </div>
-      <p class="subtitle" id="myPanelSubtitle" style="margin:6px 0 16px;">Introduce tus datos para ver, cambiar o borrar tus inscripciones.</p>
-
-      <div class="field-group">
-        <label for="myEmail" id="labelMyEmail">Correo electrónico</label>
-        <p class="field-hint" id="hintMyEmail">El mismo que usaste al apuntarte.</p>
-        <input id="myEmail" type="email" autocomplete="email" placeholder="Ej: ane@correo.com" />
-        <p class="field-error" id="errMyEmail"></p>
+      <p class="subtitle" id="myPanelSubtitle" style="margin:0 0 16px;">Introduce tus datos para ver, cambiar o borrar tus inscripciones.</p>
+      <div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+          <div>
+            <label for="myEmail" id="labelMyEmail">Email</label>
+            <input id="myEmail" type="email" required autocomplete="email" />
+          </div>
+          <div>
+            <label for="myApellido" id="labelMyApellido">Apellido</label>
+            <input id="myApellido" required autocomplete="family-name" />
+          </div>
+          <div>
+            <label for="myDni" id="labelMyDni">DNI / NAN</label>
+            <input id="myDni" required />
+          </div>
+        </div>
+        <div class="actions" style="justify-content:flex-start; margin-top: 14px;">
+          <button id="myFormBtn" onclick="loadMyShifts()">Ver mis turnos</button>
+        </div>
       </div>
-
-      <div class="field-group">
-        <label for="myApellido" id="labelMyApellido">Apellido</label>
-        <p class="field-hint" id="hintMyApellido">Tu primer apellido, tal como te apuntaste.</p>
-        <input id="myApellido" autocomplete="family-name" placeholder="Ej: Etxebarria" />
-        <p class="field-error" id="errMyApellido"></p>
-      </div>
-
-      <div class="actions" style="justify-content:flex-start; margin-top:14px;">
-        <button id="myFormBtn" onclick="loadMyShifts()">Ver mis turnos</button>
-      </div>
-
       <div id="myShifts"></div>
     </div>
   </dialog>
 
-  <!-- Dialog: cambiar turno -->
-  <dialog id="changeDialog">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="dlgChangeTitle">Cambiar turno</h3>
-        <button class="close-btn" onclick="changeDialog.close()">✕</button>
+  <!-- Dialog: apuntarse -->
+  <dialog id="signupDialog" aria-labelledby="dlgSignupTitle">
+    <div class="modal" id="signupModal">
+      <h3 id="dlgSignupTitle">Apuntarme</h3>
+      <div class="confirm-box" id="signupConfirmBox">
+        <strong id="signupConfirmLabel">Turno seleccionado:</strong>
+        <span id="signupShiftText"></span>
       </div>
-      <p id="changeShiftText" style="color:var(--muted); margin:8px 0 16px;"></p>
-      <input type="hidden" id="changeInscriptionId" />
-      <div class="field-group">
-        <label for="newShiftId" id="labelNewShift">Nuevo turno</label>
-        <p class="field-hint" id="hintNewShift">Elige el turno al que quieres cambiarte.</p>
-        <select id="newShiftId"></select>
-      </div>
+      <input type="hidden" id="signupShiftId" />
+      <label for="nombre" id="labelNombre">Nombre</label>
+      <input id="nombre" required autocomplete="given-name" />
+      <label for="apellido" id="labelApellido">Apellido</label>
+      <input id="apellido" required autocomplete="family-name" />
+      <label for="email" id="labelEmail">Email</label>
+      <input id="email" type="email" required autocomplete="email" />
+      <label for="dni" id="labelDni">DNI / NAN</label>
+      <input id="dni" required />
       <div class="actions">
-        <button type="button" class="secondary" id="dlgChangeCancel" onclick="changeDialog.close()">Cancelar</button>
+        <button type="button" class="secondary" id="dlgSignupCancel" onclick="$('signupDialog').close()">Cancelar</button>
+        <button type="button" id="dlgSignupConfirm" onclick="signup()">Confirmar inscripción</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Dialog: cambiar turno -->
+  <dialog id="changeDialog" aria-labelledby="dlgChangeTitle">
+    <div class="modal" id="changeModal">
+      <h3 id="dlgChangeTitle">Cambiar turno</h3>
+      <p id="changeShiftText"></p>
+      <input type="hidden" id="changeInscriptionId" />
+      <label for="newShiftId" id="labelNewShift">Nuevo turno</label>
+      <select id="newShiftId" required></select>
+      <div class="actions">
+        <button type="button" class="secondary" id="dlgChangeCancel" onclick="$('changeDialog').close()">Cancelar</button>
         <button type="button" id="dlgChangeConfirm" onclick="changeInscription()">Cambiar</button>
       </div>
     </div>
@@ -338,65 +480,58 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    // 1) Sustituye esta URL por la URL de despliegue de tu Google Apps Script.
     const API_URL = "https://script.google.com/macros/s/AKfycbzHf4BF7RZpMQ75rTgBW5tfvKJy_M6VqQ6qS2ocEoM30yNJyOslAiMNI1mTJg3-Q1eg/exec";
 
+    // ── Traducciones ─────────────────────────────────────────────────────────
     const TEXTS = {
       es: {
         mainTitle: "Turnos de barra",
-        headerSubtitle: "Apúntate a los turnos disponibles. Solo se muestran públicamente los nombres de las personas apuntadas.",
+        headerSubtitle: "Apúntate a los turnos disponibles. Se muestran públicamente el nombre y los apellidos de las personas apuntadas.",
         myShiftsCta: "Mis turnos",
         reloadBtn: "Actualizar",
         statusLoading: "Cargando turnos...",
         statusLoaded: n => `Actualizado. ${n} turnos cargados.`,
         myPanelTitle: "Mis turnos",
         myPanelSubtitle: "Introduce tus datos para ver, cambiar o borrar tus inscripciones.",
-        labelMyEmail: "Correo electrónico",
-        hintMyEmail: "El mismo que usaste al apuntarte.",
-        errMyEmail: "Introduce un correo válido.",
+        labelMyEmail: "Email",
         labelMyApellido: "Apellido",
-        hintMyApellido: "Tu primer apellido, tal como te apuntaste.",
-        errMyApellido: "Introduce tu apellido.",
+        labelMyDni: "DNI / NAN",
         myFormBtn: "Ver mis turnos",
         dlgSignupTitle: "Apuntarme",
         signupConfirmLabel: "Turno seleccionado:",
-        labelNombreCompleto: "Nombre y apellido",
-        hintNombreCompleto: "Escribe tu nombre completo, como en tu DNI.",
-        errNombreCompleto: "Escribe tu nombre y apellido (mínimo dos palabras).",
-        labelEmail: "Correo electrónico",
-        hintEmail: "Te enviaremos la confirmación a este correo.",
-        errEmail: "Introduce un correo electrónico válido.",
+        labelNombre: "Nombre",
+        labelApellido: "Apellido",
+        labelEmail: "Email",
+        labelDni: "DNI / NAN",
         dlgSignupCancel: "Cancelar",
-        dlgSignupConfirm: "✔ Confirmar inscripción",
-        successTitle: "¡Apuntado!",
-        successSubtitle: "Tu inscripción ha quedado registrada.",
-        successClose: "Cerrar",
+        dlgSignupConfirm: "Confirmar inscripción",
         dlgChangeTitle: "Cambiar turno",
         labelNewShift: "Nuevo turno",
-        hintNewShift: "Elige el turno al que quieres cambiarte.",
         dlgChangeCancel: "Cancelar",
         dlgChangeConfirm: "Cambiar",
         badgeFull: "Completo",
-        badgeFree: (f, tot) => `${f}/${tot} libres`,
+        badgeFree: (free, total) => `${free}/${total} libres`,
         btnSignup: "Apuntarme",
         btnFull: "Turno completo",
         noSignups: "Todavía no hay nadie apuntado.",
         noAvailable: "No hay turnos disponibles",
+        toastSignupOk: "Inscripción realizada.",
         toastChangeOk: "Turno cambiado.",
         toastDeleteOk: "Inscripción borrada.",
         confirmDelete: "¿Seguro que quieres borrar esta inscripción?",
         btnChange: "Cambiar",
         btnDelete: "Borrar",
-        noMyShifts: "No encontramos inscripciones con esos datos. Comprueba el correo y el apellido.",
+        noMyShifts: "No hay inscripciones activas para esos datos.",
         emptyStateTitle: "No hay turnos disponibles",
         emptyStateText: "Vuelve más tarde o pulsa Actualizar.",
         changePrefix: "Vas a cambiar:",
-        successTurno: "Turno",
-        successNombre: "Nombre",
-        successCorreo: "Correo",
+        fillAllFields: "Rellena todos los campos.",
+        invalidEmail: "El email no es válido.",
       },
       eu: {
         mainTitle: "Barra txandak",
-        headerSubtitle: "Eskura dauden txandetan izena eman. Publikoki izen-abizenak bakarrik agertzen dira.",
+        headerSubtitle: "Eskura dauden txandetan izena eman. Publikoki izen-abizenak agertzen dira.",
         myShiftsCta: "Nire txandak",
         reloadBtn: "Eguneratu",
         statusLoading: "Txandak kargatzen...",
@@ -404,322 +539,360 @@
         myPanelTitle: "Nire txandak",
         myPanelSubtitle: "Sartu zure datuak txandak ikusi, aldatu edo ezabatzeko.",
         labelMyEmail: "Helbide elektronikoa",
-        hintMyEmail: "Izena ematean erabili zenuen helbidea.",
-        errMyEmail: "Helbide elektroniko baliodun bat sartu.",
         labelMyApellido: "Abizena",
-        hintMyApellido: "Lehenengo abizena, izena eman zenuen bezala.",
-        errMyApellido: "Sartu zure abizena.",
+        labelMyDni: "NAN / DNI",
         myFormBtn: "Nire txandak ikusi",
         dlgSignupTitle: "Izena eman",
         signupConfirmLabel: "Hautatutako txanda:",
-        labelNombreCompleto: "Izena eta abizena",
-        hintNombreCompleto: "Idatzi zure izen-abizenak, NAN-ean agertzen diren bezala.",
-        errNombreCompleto: "Idatzi zure izena eta abizena (gutxienez bi hitz).",
+        labelNombre: "Izena",
+        labelApellido: "Abizena",
         labelEmail: "Helbide elektronikoa",
-        hintEmail: "Berrespena helbide honetara bidaliko dizugu.",
-        errEmail: "Helbide elektroniko baliodun bat sartu.",
+        labelDni: "NAN / DNI",
         dlgSignupCancel: "Utzi",
-        dlgSignupConfirm: "✔ Izena berretsi",
-        successTitle: "Izena emanda!",
-        successSubtitle: "Zure inskripzioa erregistratuta geratu da.",
-        successClose: "Itxi",
+        dlgSignupConfirm: "Izena berretsi",
         dlgChangeTitle: "Txanda aldatu",
         labelNewShift: "Txanda berria",
-        hintNewShift: "Aukeratu aldatu nahi duzun txanda.",
         dlgChangeCancel: "Utzi",
         dlgChangeConfirm: "Aldatu",
         badgeFull: "Beteta",
-        badgeFree: (f, tot) => `${f}/${tot} libre`,
+        badgeFree: (free, total) => `${free}/${total} libre`,
         btnSignup: "Izena eman",
         btnFull: "Txanda beteta",
         noSignups: "Oraindik inor ez dago izena emanda.",
         noAvailable: "Ez dago txandarik eskuragarri",
+        toastSignupOk: "Izena emanda.",
         toastChangeOk: "Txanda aldatuta.",
         toastDeleteOk: "Izena ezabatuta.",
         confirmDelete: "Ziur zaude izena ezabatu nahi duzula?",
         btnChange: "Aldatu",
         btnDelete: "Ezabatu",
-        noMyShifts: "Ez dugu inskripziorik aurkitu datu horiekin. Egiaztatu helbidea eta abizena.",
+        noMyShifts: "Ez dago inskripzio aktiborik datu horiekin.",
         emptyStateTitle: "Ez dago txandarik eskuragarri",
         emptyStateText: "Geroago itzuli edo sakatu Eguneratu.",
         changePrefix: "Aldatuko duzu:",
-        successTurno: "Txanda",
-        successNombre: "Izena",
-        successCorreo: "Helbidea",
+        fillAllFields: "Bete eremu guztiak.",
+        invalidEmail: "Emaila ez da zuzena.",
       }
     };
 
-    let lang = "es";
-    const t = (k, ...a) => { const v = TEXTS[lang][k]; return typeof v === "function" ? v(...a) : (v ?? ""); };
-    const $ = id => document.getElementById(id);
+    let lang = localStorage.getItem("lang") || "es";
 
-    const TEXT_IDS = [
-      "mainTitle","headerSubtitle","myShiftsCta","myPanelTitle","myPanelSubtitle",
-      "labelMyEmail","hintMyEmail","labelMyApellido","hintMyApellido","myFormBtn",
-      "dlgSignupTitle","signupConfirmLabel","labelNombreCompleto","hintNombreCompleto",
-      "labelEmail","hintEmail","dlgSignupCancel","dlgSignupConfirm",
-      "successTitle","successSubtitle","successClose",
-      "dlgChangeTitle","labelNewShift","hintNewShift","dlgChangeCancel","dlgChangeConfirm"
-    ];
-
-    function applyTexts() {
-      TEXT_IDS.forEach(id => { const el = $(id); if (el) el.textContent = t(id); });
-      $("reloadBtn").textContent = t("reloadBtn");
-      const s = $("status");
-      if (s?.dataset.loaded) s.textContent = t("statusLoaded", s.dataset.count || 0);
+    function t(key, ...args) {
+      const val = TEXTS[lang][key];
+      return typeof val === "function" ? val(...args) : val;
     }
 
     function setLang(l) {
       lang = l;
-      document.documentElement.lang = l;
-      $("btnEs").classList.toggle("active", l === "es");
-      $("btnEu").classList.toggle("active", l === "eu");
+      localStorage.setItem("lang", l);
       applyTexts();
       renderShifts();
       if (state.myInscriptions.length) renderMyShifts();
     }
 
+    function applyTexts() {
+      document.documentElement.lang = lang;
+      document.getElementById("btnEs").classList.toggle("active", lang === "es");
+      document.getElementById("btnEu").classList.toggle("active", lang === "eu");
+
+      const ids = [
+        "mainTitle","headerSubtitle","myShiftsCta","myPanelTitle","myPanelSubtitle",
+        "labelMyEmail","labelMyApellido","labelMyDni","myFormBtn",
+        "dlgSignupTitle","signupConfirmLabel","labelNombre","labelApellido","labelEmail","labelDni",
+        "dlgSignupCancel","dlgSignupConfirm",
+        "dlgChangeTitle","labelNewShift","dlgChangeCancel","dlgChangeConfirm"
+      ];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = t(id);
+      });
+      document.getElementById("reloadBtn").textContent = t("reloadBtn");
+      const closeBtn = document.querySelector("#myShiftsDialog .close-btn");
+      if (closeBtn) closeBtn.setAttribute("aria-label", lang === "eu" ? "Itxi" : "Cerrar");
+      const s = document.getElementById("status");
+      if (s && s.dataset.loaded) s.textContent = t("statusLoaded", s.dataset.count || 0);
+    }
+
+    // ── State ─────────────────────────────────────────────────────────────────
     const state = { shifts: [], myIdentity: null, myInscriptions: [] };
 
-    function openMyShiftsDialog() {
+    const $ = (id) => document.getElementById(id);
+
+    function scrollToMyShifts() {
       applyTexts();
-      clearErrors(["myEmail","myApellido"]);
-      $("myShifts").innerHTML = "";
-      myShiftsDialog.showModal();
+      $("myShiftsDialog").showModal();
       setTimeout(() => $("myEmail").focus(), 80);
     }
 
-    function showToast(msg) {
-      const el = $("toast");
-      el.textContent = msg;
-      el.classList.add("show");
-      setTimeout(() => el.classList.remove("show"), 3200);
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3200);
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validateRequired(fields) {
+      if (fields.some(value => !String(value || "").trim())) {
+        showToast(t("fillAllFields"));
+        return false;
+      }
+      return true;
     }
 
     function normalizeDateLabel(isoDate) {
-      const d = new Date(`${isoDate}T12:00:00`);
-      return new Intl.DateTimeFormat(lang === "eu" ? "eu-ES" : "es-ES", { day: "2-digit", month: "long" }).format(d);
+      const date = new Date(`${isoDate}T12:00:00`);
+      return new Intl.DateTimeFormat(lang === "eu" ? "eu-ES" : "es-ES", { day: "2-digit", month: "long" }).format(date);
     }
 
     async function api(action, payload = {}, method = "POST") {
-      if (method === "GET") {
-        const url = new URL(API_URL);
-        url.searchParams.set("action", action);
-        Object.entries(payload).forEach(([k, v]) => url.searchParams.set(k, v));
-        const r = await fetch(url.toString());
-        const d = await r.json();
-        if (!d.ok) throw new Error(d.error || "Error desconocido");
-        return d;
+      if (!API_URL || API_URL.includes("PON_AQUI")) {
+        throw new Error("Falta configurar la URL de Google Apps Script en index.html.");
       }
-      const r = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action, ...payload }),
-        headers: { "Content-Type": "text/plain;charset=utf-8" }
-      });
-      const d = await r.json();
-      if (!d.ok) throw new Error(d.error || "Error desconocido");
-      return d;
+
+      try {
+        let response;
+        if (method === "GET") {
+          const url = new URL(API_URL);
+          url.searchParams.set("action", action);
+          Object.entries(payload).forEach(([k, v]) => url.searchParams.set(k, v));
+          response = await fetch(url.toString());
+        } else {
+          response = await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({ action, ...payload }),
+            headers: { "Content-Type": "text/plain;charset=utf-8" }
+          });
+        }
+
+        if (!response.ok) {
+          throw new Error(`Error HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!data.ok) throw new Error(data.error || "Error desconocido");
+        return data;
+      } catch (error) {
+        throw new Error(error.message || "No se ha podido conectar con el servidor.");
+      }
     }
 
     async function loadData() {
+      const reloadBtn = $("reloadBtn");
+      reloadBtn.disabled = true;
       try {
-        const s = $("status");
-        s.textContent = t("statusLoading");
+        const statusEl = $("status");
+        statusEl.textContent = t("statusLoading");
         const data = await api("getData", {}, "GET");
         state.shifts = data.turnos || [];
         renderShifts();
-        s.textContent = t("statusLoaded", state.shifts.length);
-        s.dataset.loaded = "1";
-        s.dataset.count = state.shifts.length;
-      } catch (err) {
-        $("status").textContent = err.message;
-        showToast(err.message);
+        statusEl.textContent = t("statusLoaded", state.shifts.length);
+        statusEl.dataset.loaded = "1";
+        statusEl.dataset.count = state.shifts.length;
+      } catch (error) {
+        $("status").textContent = error.message;
+        showToast(error.message);
+      } finally {
+        reloadBtn.disabled = false;
       }
     }
 
     function groupByDate(shifts) {
-      return shifts.reduce((acc, s) => { (acc[s.fecha] ||= []).push(s); return acc; }, {});
+      return shifts.reduce((acc, shift) => {
+        acc[shift.fecha] ||= [];
+        acc[shift.fecha].push(shift);
+        return acc;
+      }, {});
     }
 
     function renderShifts() {
       const grid = $("shiftGrid");
       grid.innerHTML = "";
-      const entries = Object.entries(groupByDate(state.shifts));
+      const grouped = groupByDate(state.shifts);
+      const entries = Object.entries(grouped)
+        .sort(([fechaA], [fechaB]) => fechaA.localeCompare(fechaB));
+
       if (!entries.length) {
-        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🍺</div><p><strong>${t("emptyStateTitle")}</strong></p><p>${t("emptyStateText")}</p></div>`;
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🍺</div>
+            <p><strong>${t("emptyStateTitle")}</strong></p>
+            <p>${t("emptyStateText")}</p>
+          </div>`;
         return;
       }
-      entries.forEach(([fecha, shifts], ci) => {
+
+      entries.forEach(([fecha, shifts], cardIndex) => {
+        shifts.sort((a, b) => String(a.hora_inicio).localeCompare(String(b.hora_inicio)));
         const card = document.createElement("article");
         card.className = "card";
-        card.style.animationDelay = `${ci * 60}ms`;
-        card.innerHTML = `<div class="day-title"><h2>${shifts[0].dia || ""}</h2><span class="date">${normalizeDateLabel(fecha)}</span></div>`;
-        shifts.forEach(shift => {
+        card.style.animationDelay = `${cardIndex * 60}ms`;
+        card.innerHTML = `
+          <div class="day-title">
+            <h2>${shifts[0].dia || ""}</h2>
+            <span class="date">${normalizeDateLabel(fecha)}</span>
+          </div>
+        `;
+
+        shifts.forEach((shift) => {
           const libres = Number(shift.plazas) - Number(shift.inscritos.length);
           const full = libres <= 0;
           const people = shift.inscritos.length
-            ? `<ul class="names">${shift.inscritos.map(p => `<li>${esc(p.nombre)} ${esc(p.apellido)}</li>`).join("")}</ul>`
+            ? `<ul class="names">${shift.inscritos.map(p => `<li>${escapeHtml(p.nombre)} ${escapeHtml(p.apellido)}</li>`).join("")}</ul>`
             : `<p class="empty">${t("noSignups")}</p>`;
+
           const div = document.createElement("div");
           div.className = "shift";
           div.innerHTML = `
             <div class="shift-head">
-              <div><div class="shift-name">${esc(shift.tipo)}</div><div class="time">${esc(shift.hora_inicio)}–${esc(shift.hora_fin)}</div></div>
+              <div>
+                <div class="shift-name">${escapeHtml(shift.tipo)}</div>
+                <div class="time">${escapeHtml(shift.hora_inicio)}–${escapeHtml(shift.hora_fin)}</div>
+              </div>
               <span class="badge ${full ? "full" : ""}">${full ? t("badgeFull") : t("badgeFree", libres, shift.plazas)}</span>
             </div>
             ${people}
-            <button class="btn-signup-main" ${full ? "disabled" : ""} data-signup="${shift.id_turno}">${full ? t("btnFull") : t("btnSignup")}</button>
+            <button ${full ? "disabled" : ""} data-signup="${shift.id_turno}">${full ? t("btnFull") : t("btnSignup")}</button>
           `;
           card.appendChild(div);
         });
+
         grid.appendChild(card);
       });
-      document.querySelectorAll("[data-signup]").forEach(btn =>
-        btn.addEventListener("click", () => openSignup(btn.dataset.signup)));
-    }
 
-    // ── Field validation helpers ─────────────────────────────────────────────
-    function setFieldError(inputId, errId, msg) {
-      const inp = $(inputId), err = $(errId);
-      if (!inp || !err) return;
-      if (msg) { inp.classList.add("error"); err.textContent = msg; err.classList.add("show"); }
-      else { inp.classList.remove("error"); err.classList.remove("show"); }
-    }
-
-    function clearErrors(ids) {
-      ids.forEach(id => {
-        const inp = $(id);
-        if (inp) inp.classList.remove("error");
-        const key = "err" + id.charAt(0).toUpperCase() + id.slice(1);
-        const err = $(key);
-        if (err) err.classList.remove("show");
+      document.querySelectorAll("[data-signup]").forEach(button => {
+        button.addEventListener("click", () => openSignup(button.dataset.signup));
       });
     }
 
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // ── Signup ───────────────────────────────────────────────────────────────
     function openSignup(idTurno) {
       const shift = state.shifts.find(s => s.id_turno === idTurno);
       if (!shift) return;
       $("signupShiftId").value = idTurno;
       $("signupShiftText").textContent = `${shift.dia}, ${normalizeDateLabel(shift.fecha)} · ${shift.tipo} · ${shift.hora_inicio}–${shift.hora_fin}`;
-      $("nombreCompleto").value = "";
-      $("email").value = "";
-      clearErrors(["nombreCompleto","email"]);
-      $("signupFormView").style.display = "";
-      $("signupSuccessView").style.display = "none";
+      // Reset inputs
+      ["nombre","apellido","email","dni"].forEach(id => $(id).value = "");
       applyTexts();
-      signupDialog.showModal();
-      setTimeout(() => $("nombreCompleto").focus(), 80);
+      $("signupDialog").showModal();
     }
 
     async function signup() {
-      const nombreCompleto = $("nombreCompleto").value.trim();
+      const btn = $("dlgSignupConfirm");
+      const nombre = $("nombre").value.trim();
+      const apellido = $("apellido").value.trim();
       const email = $("email").value.trim();
-      clearErrors(["nombreCompleto","email"]);
-      let valid = true;
-      if (nombreCompleto.split(" ").filter(Boolean).length < 2) {
-        setFieldError("nombreCompleto", "errNombreCompleto", t("errNombreCompleto")); valid = false;
-      }
-      if (!emailRe.test(email)) {
-        setFieldError("email", "errEmail", t("errEmail")); valid = false;
-      }
-      if (!valid) return;
+      const dni = $("dni").value.trim();
+      if (!validateRequired([nombre, apellido, email, dni])) return;
+      if (!isValidEmail(email)) return showToast(t("invalidEmail"));
 
-      const parts = nombreCompleto.split(" ").filter(Boolean);
-      const nombre = parts[0];
-      const apellido = parts.slice(1).join(" ");
-      const shiftId = $("signupShiftId").value;
-      const shift = state.shifts.find(s => s.id_turno === shiftId);
-
-      $("dlgSignupConfirm").disabled = true;
+      btn.disabled = true;
       try {
-        await api("inscribir", { id_turno: shiftId, nombre, apellido, email, dni: "" });
-        $("signupFormView").style.display = "none";
-        $("signupSuccessView").style.display = "";
-        $("successTitle").textContent = t("successTitle");
-        $("successSubtitle").textContent = t("successSubtitle");
-        $("successClose").textContent = t("successClose");
-        $("successDetail").innerHTML = shift
-          ? `<strong>${t("successTurno")}:</strong> ${esc(shift.dia)}, ${normalizeDateLabel(shift.fecha)} · ${esc(shift.tipo)} · ${esc(shift.hora_inicio)}–${esc(shift.hora_fin)}<br>
-             <strong>${t("successNombre")}:</strong> ${esc(nombreCompleto)}<br>
-             <strong>${t("successCorreo")}:</strong> ${esc(email)}`
-          : "";
+        await api("inscribir", {
+          id_turno: $("signupShiftId").value,
+          nombre, apellido, email, dni
+        });
+        $("signupDialog").close();
+        showToast(t("toastSignupOk"));
         await loadData();
-      } catch (err) {
-        showToast(err.message);
+      } catch (error) {
+        showToast(error.message);
       } finally {
-        $("dlgSignupConfirm").disabled = false;
+        btn.disabled = false;
       }
     }
 
-    // ── Mis turnos ───────────────────────────────────────────────────────────
     async function loadMyShifts() {
+      const btn = $("myFormBtn");
       const email = $("myEmail").value.trim();
       const apellido = $("myApellido").value.trim();
-      clearErrors(["myEmail","myApellido"]);
-      let valid = true;
-      if (!emailRe.test(email)) { setFieldError("myEmail","errMyEmail", t("errMyEmail")); valid = false; }
-      if (!apellido) { setFieldError("myApellido","errMyApellido", t("errMyApellido")); valid = false; }
-      if (!valid) return;
-      state.myIdentity = { email, apellido, dni: "" };
-      $("myFormBtn").disabled = true;
+      const dni = $("myDni").value.trim();
+      if (!validateRequired([email, apellido, dni])) return;
+      if (!isValidEmail(email)) return showToast(t("invalidEmail"));
+
+      state.myIdentity = { email, apellido, dni };
+      btn.disabled = true;
       try {
         const data = await api("misTurnos", state.myIdentity);
         state.myInscriptions = data.inscripciones || [];
         renderMyShifts();
-      } catch (err) { showToast(err.message); }
-      finally { $("myFormBtn").disabled = false; }
+      } catch (error) {
+        showToast(error.message);
+      } finally {
+        btn.disabled = false;
+      }
     }
 
     function renderMyShifts() {
       const box = $("myShifts");
       if (!state.myInscriptions.length) {
-        box.innerHTML = `<p class="empty" style="margin-top:14px;">${t("noMyShifts")}</p>`;
+        box.innerHTML = `<p class="empty">${t("noMyShifts")}</p>`;
         return;
       }
       box.innerHTML = state.myInscriptions.map(item => `
         <div class="my-shift">
           <div>
-            <strong>${esc(item.dia)}, ${normalizeDateLabel(item.fecha)} · ${esc(item.tipo)}</strong><br/>
-            <span class="time">${esc(item.hora_inicio)}–${esc(item.hora_fin)}</span>
+            <strong>${escapeHtml(item.dia)}, ${normalizeDateLabel(item.fecha)} · ${escapeHtml(item.tipo)}</strong><br />
+            <span class="time">${escapeHtml(item.hora_inicio)}–${escapeHtml(item.hora_fin)}</span>
           </div>
           <button class="secondary" data-change="${item.id_inscripcion}">${t("btnChange")}</button>
           <button class="danger" data-delete="${item.id_inscripcion}">${t("btnDelete")}</button>
-        </div>`).join("");
-      document.querySelectorAll("[data-change]").forEach(b => b.addEventListener("click", () => openChange(b.dataset.change)));
-      document.querySelectorAll("[data-delete]").forEach(b => b.addEventListener("click", () => deleteInscription(b.dataset.delete)));
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-change]").forEach(b =>
+        b.addEventListener("click", () => openChange(b.dataset.change)));
+      document.querySelectorAll("[data-delete]").forEach(b =>
+        b.addEventListener("click", () => deleteInscription(b.dataset.delete, b)));
     }
 
     function openChange(idInscripcion) {
-      const cur = state.myInscriptions.find(i => i.id_inscripcion === idInscripcion);
-      if (!cur) return;
+      const current = state.myInscriptions.find(i => i.id_inscripcion === idInscripcion);
+      if (!current) return;
       $("changeInscriptionId").value = idInscripcion;
-      $("changeShiftText").textContent = `${t("changePrefix")} ${cur.dia}, ${normalizeDateLabel(cur.fecha)} · ${cur.tipo}`;
-      const opts = state.shifts
-        .filter(s => s.id_turno !== cur.id_turno && Number(s.inscritos.length) < Number(s.plazas))
+      $("changeShiftText").textContent = `${t("changePrefix")} ${current.dia}, ${normalizeDateLabel(current.fecha)} · ${current.tipo}`;
+      const options = state.shifts
+        .filter(s => s.id_turno !== current.id_turno)
+        .filter(s => Number(s.inscritos.length) < Number(s.plazas))
+        .sort((a, b) => String(a.fecha).localeCompare(String(b.fecha)) || String(a.hora_inicio).localeCompare(String(b.hora_inicio)))
         .map(s => `<option value="${s.id_turno}">${s.dia}, ${normalizeDateLabel(s.fecha)} · ${s.tipo} · ${s.hora_inicio}–${s.hora_fin}</option>`)
         .join("");
-      $("newShiftId").innerHTML = opts || `<option value="">${t("noAvailable")}</option>`;
+      const hasOptions = Boolean(options);
+      $("newShiftId").innerHTML = options || `<option value="">${t("noAvailable")}</option>`;
+      $("dlgChangeConfirm").disabled = !hasOptions;
       applyTexts();
-      changeDialog.showModal();
+      $("changeDialog").showModal();
     }
 
     async function changeInscription() {
+      const btn = $("dlgChangeConfirm");
+      if (!$("newShiftId").value) return;
+      btn.disabled = true;
       try {
-        await api("cambiar", { ...state.myIdentity, id_inscripcion: $("changeInscriptionId").value, nuevo_id_turno: $("newShiftId").value });
-        changeDialog.close();
+        await api("cambiar", {
+          ...state.myIdentity,
+          id_inscripcion: $("changeInscriptionId").value,
+          nuevo_id_turno: $("newShiftId").value
+        });
+        $("changeDialog").close();
         showToast(t("toastChangeOk"));
         await loadData();
         const data = await api("misTurnos", state.myIdentity);
         state.myInscriptions = data.inscripciones || [];
         renderMyShifts();
-      } catch (err) { showToast(err.message); }
+      } catch (error) {
+        showToast(error.message);
+      } finally {
+        btn.disabled = false;
+      }
     }
 
-    async function deleteInscription(idInscripcion) {
-      if (!confirm(t("confirmDelete"))) return;
+    async function deleteInscription(idInscripcion, button) {
+      const ok = confirm(t("confirmDelete"));
+      if (!ok) return;
+      if (button) button.disabled = true;
       try {
         await api("borrar", { ...state.myIdentity, id_inscripcion: idInscripcion });
         showToast(t("toastDeleteOk"));
@@ -727,14 +900,23 @@
         const data = await api("misTurnos", state.myIdentity);
         state.myInscriptions = data.inscripciones || [];
         renderMyShifts();
-      } catch (err) { showToast(err.message); }
+      } catch (error) {
+        showToast(error.message);
+      } finally {
+        if (button) button.disabled = false;
+      }
     }
 
-    function esc(v) {
-      return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;").replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;").replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     $("reloadBtn").addEventListener("click", loadData);
+
+    // Init
     applyTexts();
     loadData();
   </script>
