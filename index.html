@@ -129,6 +129,42 @@
       font-size: 0.95rem;
     }
 
+    .summary-card {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      align-items: stretch;
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      padding: 14px;
+      margin: 0 0 18px;
+    }
+
+    .summary-card.show { display: grid; }
+
+    .summary-item {
+      background: #fff;
+      border: 1px solid #eef2f7;
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .summary-value {
+      display: block;
+      font-size: 1.45rem;
+      font-weight: 850;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 650;
+    }
+
     button, input { font: inherit; }
 
     button {
@@ -217,6 +253,16 @@
     }
 
     .badge.full { background: #fef2f2; color: var(--danger); }
+    .badge.low { background: #fffbeb; color: #b45309; }
+
+    .names-label {
+      margin: 12px 0 6px;
+      color: var(--muted);
+      font-size: .85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
 
     .names {
       margin: 12px 0;
@@ -322,7 +368,30 @@
       font-size: .97rem;
       line-height: 1.6;
     }
-    .confirm-box strong { display: block; margin-bottom: 4px; color: var(--primary-dark); }
+    .confirm-box strong { display: block; margin-bottom: 8px; color: var(--primary-dark); }
+
+    .shift-summary {
+      display: grid;
+      gap: 8px;
+    }
+
+    .shift-summary-row {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 10px;
+      align-items: baseline;
+    }
+
+    .shift-summary-row span:first-child {
+      color: var(--muted);
+      font-weight: 800;
+      font-size: .88rem;
+    }
+
+    .shift-summary-row span:last-child {
+      color: var(--text);
+      font-weight: 750;
+    }
 
     label {
       display: block;
@@ -369,6 +438,11 @@
       .actions { justify-content: stretch; }
       .actions button { width: 100%; }
       .header-top { flex-direction: column; align-items: center; }
+      .topbar { align-items: stretch; }
+      .topbar .status { width: 100%; }
+      #reloadBtn { width: 100%; padding: 8px 14px; font-size: .92rem; }
+      .shift button { width: 100%; margin-top: 8px; }
+      .shift-summary-row { grid-template-columns: 1fr; gap: 2px; }
       h1 { text-align: center; }
     }
   </style>
@@ -390,11 +464,11 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
         </svg>
-        <span id="myShiftsCta">Mis turnos</span>
+        <span id="myShiftsCta">Consultar / cambiar mis turnos</span>
       </button>
     </div>
 
-    <p class="subtitle" id="headerSubtitle">Apúntate a los turnos disponibles. Se muestran públicamente el nombre y los apellidos de las personas apuntadas.</p>
+    <p class="subtitle" id="headerSubtitle">Consulta los turnos disponibles y apúntate en pocos segundos. Las personas inscritas se muestran públicamente con nombre y apellidos.</p>
   </header>
 
   <main>
@@ -402,6 +476,8 @@
       <div class="status" id="status">Cargando turnos...</div>
       <button class="secondary" id="reloadBtn">Actualizar</button>
     </section>
+
+    <section class="summary-card" id="summaryCard" aria-live="polite"></section>
 
     <section class="grid" id="shiftGrid"></section>
 
@@ -414,7 +490,7 @@
         <h2 id="myPanelTitle">Mis turnos</h2>
         <button class="close-btn" onclick="$('myShiftsDialog').close()" aria-label="Cerrar">✕</button>
       </div>
-      <p class="subtitle" id="myPanelSubtitle" style="margin:0 0 16px;">Introduce tus datos para ver, cambiar o borrar tus inscripciones.</p>
+      <p class="subtitle" id="myPanelSubtitle" style="margin:0 0 16px;">Introduce tu email y un apellido incluido en el campo Nombre y apellidos para ver, cambiar o borrar tus inscripciones.</p>
       <div>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
           <div>
@@ -422,12 +498,8 @@
             <input id="myEmail" type="email" required autocomplete="email" />
           </div>
           <div>
-            <label for="myApellido" id="labelMyApellido">Apellido</label>
-            <input id="myApellido" required autocomplete="family-name" />
-          </div>
-          <div>
-            <label for="myDni" id="labelMyDni">DNI / NAN</label>
-            <input id="myDni" required />
+            <label for="myApellido" id="labelMyApellido">Apellido incluido en Nombre y apellidos</label>
+            <input id="myApellido" required autocomplete="family-name" placeholder="Ej.: García" />
           </div>
         </div>
         <div class="actions" style="justify-content:flex-start; margin-top: 14px;">
@@ -444,7 +516,7 @@
       <h3 id="dlgSignupTitle">Apuntarme</h3>
       <div class="confirm-box" id="signupConfirmBox">
         <strong id="signupConfirmLabel">Turno seleccionado:</strong>
-        <span id="signupShiftText"></span>
+        <div id="signupShiftText" class="shift-summary"></div>
       </div>
       <input type="hidden" id="signupShiftId" />
       <label for="nombre" id="labelNombre">Nombre</label>
@@ -487,16 +559,16 @@
     const TEXTS = {
       es: {
         mainTitle: "Turnos de barra",
-        headerSubtitle: "Apúntate a los turnos disponibles. Se muestran públicamente el nombre y los apellidos de las personas apuntadas.",
-        myShiftsCta: "Mis turnos",
+        headerSubtitle: "Consulta los turnos disponibles y apúntate en pocos segundos. Las personas inscritas se muestran públicamente con nombre y apellidos.",
+        myShiftsCta: "Consultar / cambiar mis turnos",
         reloadBtn: "Actualizar",
+        reloadingBtn: "Actualizando...",
         statusLoading: "Cargando turnos...",
         statusLoaded: n => `Actualizado. ${n} turnos cargados.`,
         myPanelTitle: "Mis turnos",
-        myPanelSubtitle: "Introduce tus datos para ver, cambiar o borrar tus inscripciones.",
+        myPanelSubtitle: "Introduce tu email y un apellido incluido en el campo Nombre y apellidos para ver, cambiar o borrar tus inscripciones.",
         labelMyEmail: "Email",
-        labelMyApellido: "Apellido",
-        labelMyDni: "DNI / NAN",
+        labelMyApellido: "Apellido incluido en Nombre y apellidos",
         myFormBtn: "Ver mis turnos",
         dlgSignupTitle: "Apuntarme",
         signupConfirmLabel: "Turno seleccionado:",
@@ -512,9 +584,17 @@
         dlgChangeConfirm: "Cambiar",
         badgeFull: "Completo",
         badgeFree: (free, total) => `${free}/${total} libres`,
+        badgeFew: (free, total) => `${free}/${total} libres`,
         btnSignup: "Apuntarme",
         btnFull: "Turno completo",
         noSignups: "Todavía no hay nadie apuntado.",
+        namesLabel: "Personas apuntadas",
+        summaryTurns: "turnos disponibles",
+        summaryFree: "plazas libres",
+        summaryPeople: "personas apuntadas",
+        signupDay: "Día",
+        signupShift: "Turno",
+        signupTime: "Hora",
         noAvailable: "No hay turnos disponibles",
         toastSignupOk: "Inscripción realizada.",
         toastChangeOk: "Turno cambiado.",
@@ -528,19 +608,20 @@
         changePrefix: "Vas a cambiar:",
         fillAllFields: "Rellena todos los campos.",
         invalidEmail: "El email no es válido.",
+        invalidSurname: "Introduce un apellido válido, tal como aparece en Nombre y apellidos.",
       },
       eu: {
         mainTitle: "Barra txandak",
-        headerSubtitle: "Eskura dauden txandetan izena eman. Publikoki izen-abizenak agertzen dira.",
-        myShiftsCta: "Nire txandak",
+        headerSubtitle: "Ikusi eskuragarri dauden txandak eta eman izena segundo gutxitan. Izena eman duten pertsonak izen-abizenekin agertzen dira publikoki.",
+        myShiftsCta: "Nire txandak kontsultatu / aldatu",
         reloadBtn: "Eguneratu",
+        reloadingBtn: "Eguneratzen...",
         statusLoading: "Txandak kargatzen...",
         statusLoaded: n => `Eguneratuta. ${n} txanda kargatuta.`,
         myPanelTitle: "Nire txandak",
-        myPanelSubtitle: "Sartu zure datuak txandak ikusi, aldatu edo ezabatzeko.",
+        myPanelSubtitle: "Sartu zure emaila eta Izen-abizenak eremuan agertzen den abizen bat txandak ikusi, aldatu edo ezabatzeko.",
         labelMyEmail: "Helbide elektronikoa",
-        labelMyApellido: "Abizena",
-        labelMyDni: "NAN / DNI",
+        labelMyApellido: "Izen-abizenak eremuko abizena",
         myFormBtn: "Nire txandak ikusi",
         dlgSignupTitle: "Izena eman",
         signupConfirmLabel: "Hautatutako txanda:",
@@ -556,9 +637,17 @@
         dlgChangeConfirm: "Aldatu",
         badgeFull: "Beteta",
         badgeFree: (free, total) => `${free}/${total} libre`,
+        badgeFew: (free, total) => `${free}/${total} libre`,
         btnSignup: "Izena eman",
         btnFull: "Txanda beteta",
         noSignups: "Oraindik inor ez dago izena emanda.",
+        namesLabel: "Izena eman duten pertsonak",
+        summaryTurns: "txanda eskuragarri",
+        summaryFree: "leku libre",
+        summaryPeople: "pertsona izena emanda",
+        signupDay: "Eguna",
+        signupShift: "Txanda",
+        signupTime: "Ordua",
         noAvailable: "Ez dago txandarik eskuragarri",
         toastSignupOk: "Izena emanda.",
         toastChangeOk: "Txanda aldatuta.",
@@ -572,6 +661,7 @@
         changePrefix: "Aldatuko duzu:",
         fillAllFields: "Bete eremu guztiak.",
         invalidEmail: "Emaila ez da zuzena.",
+        invalidSurname: "Sartu baliozko abizena, Izen-abizenak eremuan agertzen den bezala.",
       }
     };
 
@@ -597,7 +687,7 @@
 
       const ids = [
         "mainTitle","headerSubtitle","myShiftsCta","myPanelTitle","myPanelSubtitle",
-        "labelMyEmail","labelMyApellido","labelMyDni","myFormBtn",
+        "labelMyEmail","labelMyApellido","myFormBtn",
         "dlgSignupTitle","signupConfirmLabel","labelNombre","labelApellido","labelEmail","labelDni",
         "dlgSignupCancel","dlgSignupConfirm",
         "dlgChangeTitle","labelNewShift","dlgChangeCancel","dlgChangeConfirm"
@@ -633,6 +723,18 @@
 
     function isValidEmail(email) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function normalizeText(value) {
+      return String(value || "")
+        .trim()
+        .replace(/\s+/g, " ")
+        .toLocaleLowerCase(lang === "eu" ? "eu-ES" : "es-ES");
+    }
+
+    function isValidSurname(apellido) {
+      const normalized = normalizeText(apellido);
+      return normalized.length >= 2 && /^[a-záéíóúüñç\s'-]+$/i.test(normalized);
     }
 
     function validateRequired(fields) {
@@ -683,6 +785,7 @@
     async function loadData() {
       const reloadBtn = $("reloadBtn");
       reloadBtn.disabled = true;
+      reloadBtn.textContent = t("reloadingBtn");
       try {
         const statusEl = $("status");
         statusEl.textContent = t("statusLoading");
@@ -697,6 +800,7 @@
         showToast(error.message);
       } finally {
         reloadBtn.disabled = false;
+        reloadBtn.textContent = t("reloadBtn");
       }
     }
 
@@ -708,12 +812,46 @@
       }, {});
     }
 
+    function getShiftStats() {
+      return state.shifts.reduce((acc, shift) => {
+        const plazas = Number(shift.plazas) || 0;
+        const inscritos = Array.isArray(shift.inscritos) ? shift.inscritos.length : 0;
+        acc.turnos += 1;
+        acc.plazasLibres += Math.max(plazas - inscritos, 0);
+        acc.inscritos += inscritos;
+        return acc;
+      }, { turnos: 0, plazasLibres: 0, inscritos: 0 });
+    }
+
+    function renderSummary() {
+      const summary = $("summaryCard");
+      const stats = getShiftStats();
+      if (!stats.turnos) {
+        summary.classList.remove("show");
+        summary.innerHTML = "";
+        return;
+      }
+      summary.classList.add("show");
+      summary.innerHTML = `
+        <div class="summary-item"><span class="summary-value">${stats.turnos}</span><span class="summary-label">${t("summaryTurns")}</span></div>
+        <div class="summary-item"><span class="summary-value">${stats.plazasLibres}</span><span class="summary-label">${t("summaryFree")}</span></div>
+        <div class="summary-item"><span class="summary-value">${stats.inscritos}</span><span class="summary-label">${t("summaryPeople")}</span></div>
+      `;
+    }
+
+    function getBadgeClass(free) {
+      if (free <= 0) return "full";
+      if (free <= 2) return "low";
+      return "";
+    }
+
     function renderShifts() {
       const grid = $("shiftGrid");
       grid.innerHTML = "";
       const grouped = groupByDate(state.shifts);
       const entries = Object.entries(grouped)
         .sort(([fechaA], [fechaB]) => fechaA.localeCompare(fechaB));
+      renderSummary();
 
       if (!entries.length) {
         grid.innerHTML = `
@@ -741,8 +879,9 @@
           const libres = Number(shift.plazas) - Number(shift.inscritos.length);
           const full = libres <= 0;
           const people = shift.inscritos.length
-            ? `<ul class="names">${shift.inscritos.map(p => `<li>${escapeHtml(p.nombre)} ${escapeHtml(p.apellido)}</li>`).join("")}</ul>`
+            ? `<p class="names-label">${t("namesLabel")}</p><ul class="names">${shift.inscritos.map(p => `<li>${escapeHtml(p.nombre)} ${escapeHtml(p.apellido)}</li>`).join("")}</ul>`
             : `<p class="empty">${t("noSignups")}</p>`;
+          const badgeClass = getBadgeClass(libres);
 
           const div = document.createElement("div");
           div.className = "shift";
@@ -752,7 +891,7 @@
                 <div class="shift-name">${escapeHtml(shift.tipo)}</div>
                 <div class="time">${escapeHtml(shift.hora_inicio)}–${escapeHtml(shift.hora_fin)}</div>
               </div>
-              <span class="badge ${full ? "full" : ""}">${full ? t("badgeFull") : t("badgeFree", libres, shift.plazas)}</span>
+              <span class="badge ${badgeClass}">${full ? t("badgeFull") : t(libres <= 2 ? "badgeFew" : "badgeFree", libres, shift.plazas)}</span>
             </div>
             ${people}
             <button ${full ? "disabled" : ""} data-signup="${shift.id_turno}">${full ? t("btnFull") : t("btnSignup")}</button>
@@ -772,7 +911,11 @@
       const shift = state.shifts.find(s => s.id_turno === idTurno);
       if (!shift) return;
       $("signupShiftId").value = idTurno;
-      $("signupShiftText").textContent = `${shift.dia}, ${normalizeDateLabel(shift.fecha)} · ${shift.tipo} · ${shift.hora_inicio}–${shift.hora_fin}`;
+      $("signupShiftText").innerHTML = `
+        <div class="shift-summary-row"><span>${t("signupDay")}</span><span>${escapeHtml(shift.dia)}, ${normalizeDateLabel(shift.fecha)}</span></div>
+        <div class="shift-summary-row"><span>${t("signupShift")}</span><span>${escapeHtml(shift.tipo)}</span></div>
+        <div class="shift-summary-row"><span>${t("signupTime")}</span><span>${escapeHtml(shift.hora_inicio)}–${escapeHtml(shift.hora_fin)}</span></div>
+      `;
       // Reset inputs
       ["nombre","apellido","email","dni"].forEach(id => $(id).value = "");
       applyTexts();
@@ -808,11 +951,13 @@
       const btn = $("myFormBtn");
       const email = $("myEmail").value.trim();
       const apellido = $("myApellido").value.trim();
-      const dni = $("myDni").value.trim();
-      if (!validateRequired([email, apellido, dni])) return;
+      if (!validateRequired([email, apellido])) return;
       if (!isValidEmail(email)) return showToast(t("invalidEmail"));
+      if (!isValidSurname(apellido)) return showToast(t("invalidSurname"));
 
-      state.myIdentity = { email, apellido, dni };
+      // El backend debe comprobar que el email coincide y que este apellido
+      // forma parte del campo "Nombre y apellidos" de la inscripción.
+      state.myIdentity = { email, apellido: normalizeText(apellido) };
       btn.disabled = true;
       try {
         const data = await api("misTurnos", state.myIdentity);
