@@ -257,6 +257,37 @@
     }
     .panel h2 { margin-top: 0; }
 
+    /* Modal mis turnos */
+    #myShiftsDialog {
+      border: 0;
+      border-radius: 22px;
+      padding: 0;
+      width: min(560px, calc(100% - 28px));
+      box-shadow: 0 24px 80px rgba(15, 23, 42, .35);
+    }
+    #myShiftsDialog::backdrop { background: rgba(15, 23, 42, .45); }
+    #myShiftsDialog .modal-inner {
+      padding: 24px;
+      background: white;
+      border-radius: 22px;
+    }
+    #myShiftsDialog .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    #myShiftsDialog .modal-header h2 { margin: 0; font-size: 1.4rem; }
+    #myShiftsDialog .close-btn {
+      background: #f2f4f7;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+    #myShiftsDialog .close-btn:hover { background: #e4e7ec; transform: none; }
+
     .my-shift {
       display: grid;
       grid-template-columns: 1fr auto auto;
@@ -374,11 +405,17 @@
 
     <section class="grid" id="shiftGrid"></section>
 
-    <!-- Mis turnos panel -->
-    <section class="card panel" id="myPanel">
-      <h2 id="myPanelTitle">Mis turnos</h2>
+  </main>
+
+  <!-- Dialog: mis turnos -->
+  <dialog id="myShiftsDialog">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <h2 id="myPanelTitle">Mis turnos</h2>
+        <button class="close-btn" onclick="myShiftsDialog.close()">✕</button>
+      </div>
       <p class="subtitle" id="myPanelSubtitle" style="margin:0 0 16px;">Introduce tus datos para ver, cambiar o borrar tus inscripciones.</p>
-      <div id="myForm">
+      <div>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
           <div>
             <label for="myEmail" id="labelMyEmail">Email</label>
@@ -398,8 +435,8 @@
         </div>
       </div>
       <div id="myShifts"></div>
-    </section>
-  </main>
+    </div>
+  </dialog>
 
   <!-- Dialog: apuntarse -->
   <dialog id="signupDialog">
@@ -574,8 +611,9 @@
     const $ = (id) => document.getElementById(id);
 
     function scrollToMyShifts() {
-      $("myPanel").scrollIntoView({ behavior: "smooth", block: "start" });
-      $("myEmail").focus();
+      applyTexts();
+      myShiftsDialog.showModal();
+      setTimeout(() => $("myEmail").focus(), 80);
     }
 
     function showToast(message) {
